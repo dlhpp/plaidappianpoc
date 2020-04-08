@@ -6,6 +6,23 @@
 
 - For this POC, the external page comes from github pages here:   [https://dlhpp.github.io/plaidappianpoc/index.html](https://dlhpp.github.io/plaidappianpoc/index.html)
 
+- Here's the Appian interface that embeds the above external page into an iframe:
+    ```
+    {
+    a!sectionLayout(
+        label: "Test WebComponent",
+        contents: {
+        =a!webContentField(
+            source: "https://dlhpp.github.io/plaidappianpoc/index.html",
+            height: "TALL",
+            showBorder: false,
+            altText: "DLH Test WebContentComponent"
+        )
+        }
+    )
+    }
+    ```
+
 - This github page is pure static html javascript which, when combined with a web service and database, is enough to create and manage plaid "items".
 
 - The static github page initiates the Plaid "institution select" modal window which is under Plaid's control.   When the user selects a bank and consents for us to connect to his bank, the modal window returns a public_token to the static github page.
