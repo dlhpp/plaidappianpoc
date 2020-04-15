@@ -1,10 +1,8 @@
 # Integrating Plaid into Appian POC
 
-- Uses an Appian "web content component".   
+- Use an Appian "web content component" to embed a simple static html page into an iframe within an Appian interface.
 
-- Appian web content component embeds an external page as an iframe into an Appian interface.
-
-- For this POC, the external page comes from github pages here:   [https://dlhpp.github.io/plaidappianpoc/index.html](https://dlhpp.github.io/plaidappianpoc/index.html)
+- For this POC purely for convenience, the external page comes from github pages here:   [https://dlhpp.github.io/plaidappianpoc/index.html](https://dlhpp.github.io/plaidappianpoc/index.html)
 
 - Here's the Appian interface that embeds the above external page into an iframe:
     ```
