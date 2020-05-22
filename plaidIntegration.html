@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Plaid Integration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        div {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #174f7c;
+            box-shadow: 0 1px 2px rgba(3,49,86,0.3), inset 0 -1px 0 #0d3f68, inset 0 1px 0 #2f6089;
+            color: #fff;
+            border-bottom-width: 0;
+            border-radius: 4px;
+            border-width: 0;
+            /* display: inline-block; */
+            font-size: 1.4rem;
+            height: 2.8rem;
+            line-height: 2.8rem;
+            padding-bottom: 0;
+            padding-left: 2.4rem;
+            padding-right: 2.4rem;
+            padding-top: 0;
+            position: relative;
+            text-decoration: none;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+</head>
+
+<body>
+    <div id="poc" style="display: none;">
+
+        <h1>Plaid Integration</h1>
+                    
+        <div>
+            See source code here:
+            <a target="_blank" href="https://github.com/dlhpp/plaidappianpoc">https://github.com/dlhpp/plaidappianpoc</a>
+        </div>
+    
+        <div id="show_public_token" style="display: none;">
+
+            <h2>Congratulations! You just created an Item by linking your account!</h2>
+    
+            <h3>public_token: <span id="public_token" style="color: deeppink;"></span></h3>   
+
+        </div>
+    
+    </div>
+    
+    <div id="link-btn-div" style="text-align: center;">
+        <button id="link-btn" disabled></button>
+        <p id="displayMsg"></p>
+    </div>
+
+
+
+    <script>
+        (function ($) {
+
+            var qsDataObj = {
+                key: qs('key') || '42d86233c7d8205a5458c345de12fe',   // public key.  '42d86233c7d8205a5458c345de12fe'
+                txt: qs('txt') || 'Connect with Plaid',               // text to display on the button
+                env: qs('env') || 'sandbox',                          // sandbox, development, production
+                tok: qs('tok') || '',                                 // generated public key used in update flow
+                poc: qs('poc') || 'Y',                                // set to N to avoid displaying POC/debugging info
+                msg: qs('msg') || 'Y',                                // set to N to avoid displaying status msg below the button
+                align: qs('align') || 'center'                        // alignment of the button; set to left, center, right
+            }
+
+            var productArray = ['transactions'];   // possibilities are:   ['transactions,auth,identity,income,assets,liabilities'];
+
+            console.log('qsDataObj=', qsDataObj);
+
+            $('#link-btn').attr('disabled', false).text(qsDataObj.txt);
+
+            $('#link-btn-div').css('text-align', qsDataObj.align);
+
+            if (qsDataObj.poc === 'Y') $('#poc').show();
+
+            $('#link-btn').on('click', function (e) {
+
+                var plaidConfigObj = {
+                    apiVersion: 'v2',
+                    clientName: 'DLH Test Plaid Quickstart',
+                    countryCodes: 'US',
+                    env: qsDataObj.env,
+                    key: qsDataObj.key,
+                    product: productArray,
+                    // webhook: 'https://your-domain.tld/plaid-webhook',
+                    onSuccess: function (public_token, metadata) {
+                        console.log('onSuccess, public_token=', public_token, ', metadata=', metadata);
+                        $('#public_token').text(public_token);
+                        $('#show_public_token').show();
+                        if ('Y' === qsDataObj.msg) $('#displayMsg').text('success!');
+                    },
+                    onExit: function(err, metadata) {
+                        console.log('onExit, err=', err, ', metadata=', metadata);
+                        $('#displayMsg').text('');
+                        if (err != null && 'Y' === qsDataObj.msg) {
+                            // The user encountered a Plaid API error prior to exiting.
+                            $('#displayMsg').text('error: ' + err.display_message);
+                        }
+                    },
+                    onEvent: function(eventName, metadata) {
+                        // console.log('onEvent, eventName=', eventName, ', metadata=', metadata);
+                    }
+                }
+
+                console.log('plaidConfigObj: ', plaidConfigObj);
+
+                var handler = Plaid.create(plaidConfigObj);
+                handler.open();
+            });
+
+        })(jQuery);
+
+        function qs(key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+            var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+        }
+
+        function displayError(element, error) {
+            var html = `
+    <div class="alert alert-danger">
+      <p><strong>Error Code:</strong> ${error.error_code}</p>
+      <p><strong>Error Type:</strong> ${error.error_type}</p>
+      <p><strong>Error Message:</strong> ${error.display_message == null ? error.error_message : error.display_message}</p>
+      <div>Check out our <a href="https://plaid.com/docs/#errors-overview">errors documentation</a> for more information.</div>
+    </div>`;
+            $(element).html(html).slideDown();
+        }
+    </script>
+</body>
+
+</html>
