@@ -2,7 +2,7 @@
 
 - Use an Appian "web content component" to embed a simple static html page into an iframe within an Appian interface.
 
-- For convenience and to demonstrate how simple it is to create the static javascript page, this POC will use an external page residing on github pages.   You can run this static javascript page stand-alone as well, it is not required to be embedded in an iframe:   [https://dlhpp.github.io/plaidappianpoc/index.html](https://dlhpp.github.io/plaidappianpoc/index.html), or for a slightly more dynamic verion:  [new dynamic version](https://dlhpp.github.io/plaidappianpoc/plaidIntegration.html?poc=N&align=left)
+- For convenience and to demonstrate how simple it is to create the static javascript page, this POC will use an external page residing on github pages.   You can run this static javascript page stand-alone as well, it is not required to be embedded in an iframe:   [https://dlhpp.github.io/plaidappianpoc/index.html](https://dlhpp.github.io/plaidappianpoc/index.html), or for a slightly more dynamic verion:  [](https://dlhpp.github.io/plaidappianpoc/plaidIntegration.html?poc=N&align=left)
 
 - Here's the Appian interface that embeds the above external page into an iframe:
     ```
