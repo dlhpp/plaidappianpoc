@@ -112,6 +112,8 @@
                     }
                 }
 
+                if (qsDataObj.tok) plaidConfigObj.token = qsDataObj.tok;
+
                 console.log('plaidConfigObj: ', plaidConfigObj);
 
                 var handler = Plaid.create(plaidConfigObj);
